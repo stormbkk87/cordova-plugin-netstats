@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="cordova-plugin-netstats"
+    version="0.0.2">
+
+  <name>netstats</name>
+  <description>Cordova iOS plugin network stats</description>
+  <author>VFR Unified Technologies, SA</author>
+  <license>MIT</license>
+  <keywords>udp, ping, ios</keywords>
+
+  <info>
+    cordova-plugin-netstats gathers stats on the current network connection to a remote host
+  </info>
+
+  <engines>
+    <engine name="cordova-ios" version=">=3.7.0" />
+  </engines>
+
+  <js-module src="www/cordova-plugin-netstats.js" name="Plugin">
+    <clobbers target="cordova.plugins.netstats" />
+  </js-module>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="netstatsPlugin">
+        <param name="ios-package" value="netstatsPlugin" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <!-- ObjetiveC headers -->
+    <header-file src="src/ios/SimplePing.h" />
+    <header-file src="src/ios/CDZPinger.h" />
+    <header-file src="src/ios/netstatsPlugin.h" />
+
+    <!-- Project source files -->
+    <source-file src="src/ios/SimplePing.m" />
+    <source-file src="src/ios/CDZPinger.m" />
+    <source-file src="src/ios/netstatsPlugin.m" />
+
+    <!-- iOS shared dependencies -->
+    <framework src="CFNetwork.framework" />
+    <framework src="AssetsLibrary.framework" />
+    <framework src="CoreGraphics.framework" />
+    <framework src="MobileCoreServices.framework" />
+    <framework src="Foundation.framework" />
+  </platform>
+
+</plugin>
