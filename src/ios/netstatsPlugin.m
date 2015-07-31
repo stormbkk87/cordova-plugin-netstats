@@ -27,7 +27,7 @@ NSInteger limitPings = 0;
     NSLog(@"getPing");
     
     pingCallbackId = command.callbackId;
-    limitPings = [command.arguments objectAtIndex:0];
+    limitPings = [[command.arguments objectAtIndex:0] intValue];
 
     [self.pinger startPinging];
 }
