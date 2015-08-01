@@ -18,14 +18,10 @@ NSInteger limitPings = 0;
     
     self.pinger = [[CDZPinger alloc] initWithHost: host];
     self.pinger.delegate = self;
-
-    NSLog(@"Finished Init");
 }
 
 - (void)getPing:(CDVInvokedUrlCommand*)command
 {   
-    NSLog(@"getPing");
-    
     pingCallbackId = command.callbackId;
     limitPings = [[command.arguments objectAtIndex:0] intValue];
 
@@ -38,14 +34,12 @@ NSInteger limitPings = 0;
 {
     totalPings++;
 
-    NSLog(@"Ping update");
-
     if (totalPings == limitPings){
         [self.pinger stopPinging];
 
-        NSString *res = [NSString stringWithFormat:@"%f", (seconds * 1000.0)];
-    
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: res];
+        int result = (int)(seconds * 1000.0);
+        
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: result];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:pingCallbackId];
     }
@@ -53,8 +47,6 @@ NSInteger limitPings = 0;
 
 - (void)pinger:(CDZPinger *)pinger didEncounterError:(NSError *)error
 {
-    [self.pinger stopPinging];
-
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: error.localizedDescription];
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:pingCallbackId];

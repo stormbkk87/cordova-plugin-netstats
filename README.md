@@ -18,6 +18,9 @@ Packet Loss
           numberOfPings: 6,
           onComplete: function(result){
             console.log("Avg Ping: "+result);
+          },
+          onError: function(error){
+            console.log("Error from plugin netstats: "+error);
           }
         });
       }

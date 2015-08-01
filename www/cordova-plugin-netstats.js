@@ -5,7 +5,7 @@ var netstats = {
         exec(null, null, "netstatsPlugin", "init", [host]);
     },
     getPing: function(params) {
-        exec(params.onComplete, null, "netstatsPlugin", "getPing", [params.numberOfPings]);
+        exec(params.onComplete, params.onError, "netstatsPlugin", "getPing", [params.numberOfPings]);
     }
 };
     
