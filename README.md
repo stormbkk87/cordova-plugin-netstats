@@ -1,6 +1,15 @@
 # cordova-plugin-netstats
 Cordova iOS plugin gathers stats on the current network connection to a remote host
 
+Current
+
+getPing - Average ping latency in milliseconds
+
+Future
+
+Jitter
+Packet Loss
+
     document.addEventListener('deviceready', function () {
       if (window.device.platform === 'iOS') {
         cordova.plugins.netstats.init(<hostname>);
