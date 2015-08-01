@@ -104,7 +104,7 @@
 {
     self.pingStartTime = [NSDate date];
 
-    NSLog(@"#%u sent", (unsigned int) OSSwapBigToHostInt16(((const ICMPHeader *) [packet bytes])->sequenceNumber));
+    //NSLog(@"#%u sent", (unsigned int) OSSwapBigToHostInt16(((const ICMPHeader *) [packet bytes])->sequenceNumber));
 }
 
 - (void)simplePing:(SimplePing *)pinger didReceivePingResponsePacket:(NSData *)packet
@@ -112,7 +112,7 @@
     NSTimeInterval pingTime = [[NSDate date] timeIntervalSinceDate:self.pingStartTime];
     [self receivedPingWithTime:pingTime];
 
-    NSLog(@"#%u received", (unsigned int) OSSwapBigToHostInt16([SimplePing icmpInPacket:packet]->sequenceNumber) );
+    //NSLog(@"#%u received", (unsigned int) OSSwapBigToHostInt16([SimplePing icmpInPacket:packet]->sequenceNumber) );
 }
 
 - (void)simplePing:(SimplePing *)pinger didFailWithError:(NSError *)error

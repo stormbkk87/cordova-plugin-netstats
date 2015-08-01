@@ -43,7 +43,7 @@ NSInteger limitPings = 0;
     if (totalPings == limitPings){
         [self.pinger stopPinging];
 
-        NSString *res = [NSString stringWithFormat:@"%f", seconds];
+        NSString *res = [NSString stringWithFormat:@"%f", (seconds * 1000.0)];
     
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: res];
 
