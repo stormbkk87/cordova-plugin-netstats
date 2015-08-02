@@ -9,8 +9,8 @@
 @implementation netstatsPlugin
 
 NSString* pingCallbackId;
-NSInteger totalPings = 0;
-NSInteger limitPings = 0;
+int totalPings = 0;
+int limitPings = 0;
 
 - (void)init:(CDVInvokedUrlCommand*)command
 {
@@ -21,9 +21,11 @@ NSInteger limitPings = 0;
 }
 
 - (void)getPing:(CDVInvokedUrlCommand*)command
-{   
+{
+    totalPings = 0;
+    
     pingCallbackId = command.callbackId;
-    limitPings = [[command.arguments objectAtIndex:0] intValue];
+    limitPings = (int)[[command.arguments objectAtIndex:0] intValue];
 
     [self.pinger startPinging];
 }
@@ -33,7 +35,7 @@ NSInteger limitPings = 0;
 - (void)pinger:(CDZPinger *)pinger didUpdateWithAverageSeconds:(NSTimeInterval)seconds
 {
     totalPings++;
-
+    
     if (totalPings == limitPings){
         [self.pinger stopPinging];
 
