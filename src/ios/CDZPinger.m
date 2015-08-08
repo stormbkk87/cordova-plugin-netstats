@@ -42,8 +42,6 @@ SMDelayedBlockHandle _delayedBlockHandle;
 
 - (void)stopPinging
 {
-    NSLog(@"stopPinging");
-    
     self.pingingDesired = NO;
     [self.simplePing stop];
     self.simplePing = nil;
@@ -112,7 +110,7 @@ SMDelayedBlockHandle _delayedBlockHandle;
     
     [self delayBlock];
     
-    NSLog(@"#%u sent", (unsigned int) OSSwapBigToHostInt16(((const ICMPHeader *) [packet bytes])->sequenceNumber));
+    //NSLog(@"#%u sent", (unsigned int) OSSwapBigToHostInt16(((const ICMPHeader *) [packet bytes])->sequenceNumber));
 }
 
 - (void)simplePing:(SimplePing *)pinger didReceivePingResponsePacket:(NSData *)packet
@@ -122,7 +120,7 @@ SMDelayedBlockHandle _delayedBlockHandle;
     NSTimeInterval pingTime = [[NSDate date] timeIntervalSinceDate:self.pingStartTime];
     [self receivedPingWithTime:pingTime];
     
-    NSLog(@"#%u received", (unsigned int) OSSwapBigToHostInt16([SimplePing icmpInPacket:packet]->sequenceNumber) );
+    //NSLog(@"#%u received", (unsigned int) OSSwapBigToHostInt16([SimplePing icmpInPacket:packet]->sequenceNumber) );
 }
 
 - (void)simplePing:(SimplePing *)pinger didFailWithError:(NSError *)error
@@ -148,7 +146,7 @@ SMDelayedBlockHandle _delayedBlockHandle;
 - (void)delayBlock
 {
     _delayedBlockHandle = perform_block_after_delay(2.0f, ^{
-        NSLog(@"Block timeout");
+        //NSLog(@"Block timeout");
         [self receivedPingWithTime:0];
         
         [self cancelBlock];

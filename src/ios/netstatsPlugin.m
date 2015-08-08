@@ -36,7 +36,7 @@ int limitPings = 0;
 {
     totalPings++;
     
-    if (totalPings == limitPings){
+    if (totalPings >= limitPings){
         [self.pinger stopPinging];
 
         int result = (int)(seconds * 1000.0);
@@ -44,6 +44,8 @@ int limitPings = 0;
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: result];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:pingCallbackId];
+
+        self.pinger = nil;
     }
 }
 
@@ -52,6 +54,8 @@ int limitPings = 0;
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: error.localizedDescription];
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:pingCallbackId];
+
+    self.pinger = nil;
 }
 
 @end
