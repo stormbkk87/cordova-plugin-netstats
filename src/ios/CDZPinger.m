@@ -16,6 +16,7 @@
 @implementation CDZPinger
 
 @synthesize lastPingTimes = _lastPingTimes;
+SMDelayedBlockHandle _delayedBlockHandle;
 
 - (id)initWithHost:(NSString *)domainOrIp
 {
@@ -41,6 +42,8 @@
 
 - (void)stopPinging
 {
+    NSLog(@"stopPinging");
+    
     self.pingingDesired = NO;
     [self.simplePing stop];
     self.simplePing = nil;
@@ -63,7 +66,10 @@
         });
     }
 
-    [self addPingTimeToRecord:time];
+    if (time > 0){
+        [self addPingTimeToRecord:time];
+    }
+    
     __block NSTimeInterval totalTime = 0.0;
     __block NSUInteger timeCount = 0;
     [self.lastPingTimes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -103,16 +109,20 @@
 - (void)simplePing:(SimplePing *)pinger didSendPacket:(NSData *)packet
 {
     self.pingStartTime = [NSDate date];
-
-    //NSLog(@"#%u sent", (unsigned int) OSSwapBigToHostInt16(((const ICMPHeader *) [packet bytes])->sequenceNumber));
+    
+    [self delayBlock];
+    
+    NSLog(@"#%u sent", (unsigned int) OSSwapBigToHostInt16(((const ICMPHeader *) [packet bytes])->sequenceNumber));
 }
 
 - (void)simplePing:(SimplePing *)pinger didReceivePingResponsePacket:(NSData *)packet
 {
+    [self cancelBlock];
+    
     NSTimeInterval pingTime = [[NSDate date] timeIntervalSinceDate:self.pingStartTime];
     [self receivedPingWithTime:pingTime];
-
-    //NSLog(@"#%u received", (unsigned int) OSSwapBigToHostInt16([SimplePing icmpInPacket:packet]->sequenceNumber) );
+    
+    NSLog(@"#%u received", (unsigned int) OSSwapBigToHostInt16([SimplePing icmpInPacket:packet]->sequenceNumber) );
 }
 
 - (void)simplePing:(SimplePing *)pinger didFailWithError:(NSError *)error
@@ -133,6 +143,26 @@
         _lastPingTimes = [NSMutableArray array];
     }
     return _lastPingTimes;
+}
+
+- (void)delayBlock
+{
+    _delayedBlockHandle = perform_block_after_delay(2.0f, ^{
+        NSLog(@"Block timeout");
+        [self receivedPingWithTime:0];
+        
+        [self cancelBlock];
+    });
+}
+
+- (void)cancelBlock
+{
+    if (nil == _delayedBlockHandle) {
+        return;
+    }
+    
+    _delayedBlockHandle(YES);
+    _delayedBlockHandle = nil;
 }
 
 @end
